@@ -5,6 +5,31 @@
         <title>hello</title>
     </head>
     <body>
-        <p>Hello world</p>
+        <label for="task">Enter your task</label><input type="text" name="" id="task" placeholder="Enter your task here...">
+        <div id="taskContainer"></div>
+        <button onclick="sendTask()">Add</button>
+
+        <script>
+            function sendTask() {
+                let task = document.getElementById('task').value;
+                if (!task) return ; // ignore empty tasks
+
+                fetch('/addTask?name=' + encodeURIComponent(task), {
+                        method: 'POST'
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+
+                        // create a new <p> element and add it to the container
+                        let p = document.createElement('p');
+                        p.textContent = task;
+                        document.getElementById('taskContainer').appendChild(p);
+
+                        // clear the input
+                        document.getElementById('task').value = '';
+                    });
+            }
+        </script>
     </body>
 </html>
