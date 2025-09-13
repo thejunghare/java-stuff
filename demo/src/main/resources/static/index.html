@@ -10,25 +10,30 @@
         <button onclick="sendTask()">Add</button>
 
         <script>
-            function sendTask() {
+            async function sendTask() {
                 let task = document.getElementById('task').value;
-                if (!task) return ; // ignore empty tasks
+                if (!task) return; // ignore empty input
 
-                fetch('/addTask?name=' + encodeURIComponent(task), {
-                        method: 'POST'
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log(data);
+                try {
+                    // Send the request and wait for the response
+                    let response = await fetch('/addTask?name=' + task, { method: 'POST' });
 
-                        // create a new <p> element and add it to the container
-                        let p = document.createElement('p');
-                        p.textContent = task;
-                        document.getElementById('taskContainer').appendChild(p);
+                    // Read the response body as text
+                    let data = await response.text();
 
-                        // clear the input
-                        document.getElementById('task').value = '';
-                    });
+                    console.log(data);
+
+                    // Add the task to the container
+                    let p = document.createElement('p');
+                    p.textContent = task;
+                    document.getElementById('taskContainer').appendChild(p);
+
+                    // Clear the input
+                    document.getElementById('task').value = '';
+
+                } catch (err) {
+                    console.error('Error sending task:', err);
+                }
             }
         </script>
     </body>
