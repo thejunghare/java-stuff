@@ -1,10 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.model.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -46,31 +47,31 @@ public class TaskController {
         return taskRepository.save(task);
     }
 
-    /*
-     * @PutMapping("/{id}")
-     * public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody
-     * Task taskData) {
-     * System.out.println("Trying to update task with ID: " + id);
-     * 
-     * Task existingTask = taskRepository.findById(id).orElse(null);
-     * 
-     * if (existingTask == null) {
-     * System.out.println("Task not found!");
-     * return ResponseEntity.notFound().build();
-     * }
-     * 
-     * existingTask.setName(taskData.getName());
-     * Task updatedTask = taskRepository.save(existingTask);
-     * 
-     * return ResponseEntity.ok(updatedTask);
-     * }
-     */
+
+//      @PutMapping("/{id}")
+//     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody
+//      Task taskData) {
+//     System.out.println("Trying to update task with ID: " + id);
+//
+//      Task existingTask = taskRepository.findById(id).orElse(null);
+//
+//      if (existingTask == null) {
+//      System.out.println("Task not found!");
+//      return ResponseEntity.notFound().build();
+//      }
+//
+//     existingTask.setName(taskData.getName());
+//      Task updatedTask = taskRepository.save(existingTask);
+//
+//      return ResponseEntity.ok(updatedTask);
+//     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         Optional<Task> existingTask = taskRepository.findById(id);
 
-        if (existingTask != null) {
+        if (existingTask.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Task with ID " + id + " not found.");
