@@ -1,6 +1,8 @@
-package com.example.demo;
+package com.example.demo.controller;
 
 import com.example.demo.model.Task;
+import com.example.demo.repository.TaskRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +73,7 @@ public class TaskController {
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         Optional<Task> existingTask = taskRepository.findById(id);
 
-        if (existingTask.isPresent()) {
+        if (!existingTask.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Task with ID " + id + " not found.");
@@ -86,7 +88,7 @@ public class TaskController {
     public ResponseEntity<String> deleteTask(@PathVariable Long id, @RequestBody Task task) {
         Optional<Task> existingTask = taskRepository.findById(id);
 
-        if (existingTask.isPresent()) {
+        if (!existingTask.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("Task with ID " + id + " not found.");

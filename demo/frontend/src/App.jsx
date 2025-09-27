@@ -1,65 +1,16 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Signup from "./Signup";
+import Login from "./Login";
+import Dashboard from "./Dashboard";
 
-function App() {
-  const [tasks, setTask] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const [taskId, setTaskId] = useState("");
-  const [singleTask, setSingleTask] = useState(null);
-
-  async function getAllTask() {
-    setLoading(true);
-    try {
-      let result = await axios.get("http://localhost:8080/api/tasks");
-      setTask(result.data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function getTask() {
-    setLoading(true);
-    try {
-      let result = await axios.get(`http://localhost:8080/api/tasks/${taskId}`);
-      setSingleTask(result.data);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    getAllTask();
-  }, []);
-
-  if (loading) return <p>Loading..!</p>;
-  if (error) return <p>error..! {error}</p>;
-
+export default function App() {
   return (
-    <div>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>{task.name}</li>
-        ))}
-      </ul>
-
-      <input
-        type="text"
-        name=""
-        id=""
-        onChange={(e) => setTaskId(e.target.value)}
-      />
-      <button onClick={getTask}>get</button>
-
-      <div>{singleTask && <p>{singleTask.name}</p>}</div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
