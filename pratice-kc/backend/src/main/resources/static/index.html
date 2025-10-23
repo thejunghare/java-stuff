@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>hello</title>
+    </head>
+    <body>
+        <label for="task">Enter your task</label><input type="text" name="" id="task" placeholder="Enter your task here...">
+        <div id="taskContainer"></div>
+        <button onclick="sendTask()">Add</button>
+
+        <script>
+            async function sendTask() {
+                let task = document.getElementById('task').value;
+                if (!task) return; // ignore empty input
+
+                try {
+                    // Send the request and wait for the response
+                    let response = await fetch('/addTask?name=' + task, { method: 'POST' });
+
+                    // Read the response body as text
+                    let data = await response.text();
+
+                    console.log(data);
+
+                    // Add the task to the container
+                    let p = document.createElement('p');
+                    p.textContent = task;
+                    document.getElementById('taskContainer').appendChild(p);
+
+                    // Clear the input
+                    document.getElementById('task').value = '';
+
+                } catch (err) {
+                    console.error('Error sending task:', err);
+                }
+            }
+        </script>
+    </body>
+</html>
